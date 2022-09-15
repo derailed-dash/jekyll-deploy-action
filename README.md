@@ -101,6 +101,10 @@ jobs:
           pre_build_commands: ''     # Installing additional dependencies (Arch Linux)
 ```
 
+**💡 Don't forget to update your `jekyll_src` location to point to your docs folder, if it's not in the repo root.**
+
+Now commit your action.
+
 ### Ensure You Have a `gh-pages` Branch
   
 If you don't have the `gh-pages` branch, you should create one.  This code creates an empty `gh-pages` branch with no source, as we require:
@@ -111,7 +115,13 @@ git rm -rf .
 git commit --allow-empty -m "initial commit"
 git push origin gh-pages
 ```
- 
+
+Back on your client, you'll probably now want to switch back to your master/main branch, e.g.
+
+```bash
+git checkout master
+```
+
 ### Configure Your GitHub Pages Settings
   
 Finally:
