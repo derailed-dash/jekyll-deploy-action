@@ -49,14 +49,24 @@ ${SCRIPT_DIR}/script/init_environment.sh
 
 cd ${JEKYLL_SRC}
 
-# Restore modification time (mtime) of git files
-echo "Restore modification time of all git files"
-${SCRIPT_DIR}/script/restore_mtime.sh
-
 # Check and execute pre_build_commands commands
 if [[ ${PRE_BUILD_COMMANDS} ]]; then
   echo "Executing pre-build commands"
   eval "${PRE_BUILD_COMMANDS}"
+fi
+
+echo "Check bundler version from Gemfile.lock"
+GEMFILE_LOCK_DIR="${PWD}"
+while [[ "${GEMFILE_LOCK_DIR}" != "/" ]] &&
+  [[ ! -f "${GEMFILE_LOCK_DIR}/Gemfile.lock" ]]; do
+  GEMFILE_LOCK_DIR="$(dirname "${GEMFILE_LOCK_DIR}")"
+done
+
+if [[ -f "${GEMFILE_LOCK_DIR}/Gemfile.lock" ]]; then
+  BUNDLER_VER="$( \
+    grep -A 1 'BUNDLED WITH' "${GEMFILE_LOCK_DIR}/Gemfile.lock" | \
+    tail -n 1 | xargs)"
+  echo "Bundler version ${BUNDLER_VER} is required by your Gemfile.lock!"
 fi
 
 echo "Initial comptible bundler"
